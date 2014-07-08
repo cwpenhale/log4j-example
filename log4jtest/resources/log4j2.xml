@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<properties>
+		<property name="pattern">"%d %-5p - %-26.26c{1} - %m %n</property>
+	</properties>
+	<appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="${pattern}" />
+		</Console>
+		<RollingFile name="RollingFile" fileName="/tmp/example.log"
+			filePattern="logs/$${date:yyyy-MM}/${name}-%d{yyyy-MM-dd}-%i.log.gz">
+			<PatternLayout>
+				<pattern>${pattern}</pattern>
+			</PatternLayout>
+			<Policies>
+				<TimeBasedTriggeringPolicy /><!-- Rotated everyday -->
+				<SizeBasedTriggeringPolicy size="100 MB" /> <!-- Or every 100 MB -->
+			</Policies>
+		</RollingFile>
+	</appenders>
+	<loggers>
+		<logger name="com.openlogic.test" level="debug">
+			<AppenderRef ref="RollingFile" />
+		</logger>
+		<root level="debug"> <!-- We log everything -->
+			<appender-ref ref="Console" /> <!-- To console -->
+			<appender-ref ref="RollingFile" /> <!-- And to a rotated file -->
+		</root>
+	</loggers>
+</configuration>
